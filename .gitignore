@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.venv/
+antecipe.db
+antecipe.db-shm
+antecipe.db-wal
+*.log

@@ -1,0 +1,36 @@
+ANTECIPE V5 - COMO USAR
+======================
+1. Extraia o ZIP em uma pasta do Windows.
+2. Dê dois cliques em INICIAR_ANTECIPE.bat. É preciso ter Python instalado.
+3. Abra http://127.0.0.1:8501 no navegador, se não abrir automaticamente.
+4. Crie a conta de administrador no primeiro acesso.
+5. Envie estoque_antecipe_100k.zip e cnpj_situacao_mock.csv.
+6. O JSON validadores_antecipe.json já está incluído e é registrado na inicialização.
+7. Cada nova importação de recebíveis/cadastro/regras dispara nova validação, desde que haja recebíveis e regras.
+8. Veja resultados em Visão geral e Consultar recebíveis. A aba Regras e histórico permite revalidar e comparar com o gabarito.
+
+SIGNIFICADO DAS DECISÕES
+- APROVADO: todas as regras ativas foram satisfeitas e há dados suficientes.
+- BARRADO: uma ou mais regras foram violadas. O motivo aparece por título.
+- PENDENTE: não houve violação detectada, mas falta dado para decisão segura, por exemplo situação cadastral ou datas.
+
+PRECIFICAÇÃO
+- O valor antecipável usa desconto simples comercial = valor nominal * (1 - 0,02 * dias / 30).
+- Considera o prazo entre DATA_AQUISICAO e DATA_VENCIMENTO_ORIGINAL.
+- Zera valores negativos e retorna zero para barrados ou pendentes.
+- É simulação técnica, não proposta financeira nem tarifa real.
+
+GABARITO E LIMITAÇÕES IMPORTANTES
+- O arquivo resultado_esperado_100k.json contém 85.215 APROVADOS e 15.339 BARRADOS.
+- Os dados cadastrais mock fornecidos não bastam para reproduzir fielmente todas as decisões: o V5 exibe PENDENTES e divergências de forma transparente.
+- O sistema NÃO altera ou força resultados para atingir o gabarito.
+- Para chegar ao resultado exato, devem ser confirmados os cadastros ausentes e o critério oficial de referência para concentração/datas.
+- O sistema depende apenas do Python e da biblioteca padrão; não é um executável independente.
+- Uso local para protótipo. Não disponibilize publicamente sem auditoria de segurança.
+
+ATUALIZAÇÃO SEM APAGAR DADOS
+Copie seu antecipe.db antigo para dentro da nova pasta após fazer um backup.
+Nunca exclua o banco de dados em produção.
+
+TESTES
+Os testes de integração usam os dois arquivos reais presentes no ambiente de avaliação. Execute teste_integracao.py apenas onde esses arquivos estiverem disponíveis. Não está incluído no ZIP distribuído.

@@ -1,0 +1,23 @@
+from pathlib import Path
+p=Path(__file__).parent
+s=(p/'motor_validacao.py').read_text()
+s=s.replace("if status is None:warnings.append('Situação cadastral não localizada para '+sacado)","if status is None:warnings.append('Situação cadastral não localizada para '+sacado)")
+s=s.replace("status='BARRADO' if reasons else ('NÃO AVALIADO' if days is None else 'APROVADO')", "status='BARRADO' if reasons else ('PENDENTE' if warnings else 'APROVADO')")
+s=s.replace("if status=='NÃO AVALIADO':unavailable+=1", "if status=='PENDENTE':unavailable+=1")
+s=s.replace("reasons_json=json.dumps({'motivos':reasons,'avisos':warnings,'valor_antecipavel':float(price),'prazo_dias':days},ensure_ascii=False)", "reasons_json=json.dumps({'motivos':reasons,'avisos':warnings,'valor_antecipavel':float(price),'prazo_dias':days,'valor_nominal':float(nominal),'desconto':float(max(Decimal(0),nominal-price)) if status=='APROVADO' else 0},ensure_ascii=False)")
+s=s.replace("return {'avaliados':count,'sem_dados_suficientes':unavailable}","return {'avaliados':count,'pendentes':unavailable,'aviso':'PENDENTE significa que não há informações suficientes para decidir; não é aprovação.'}")
+(p/'motor_validacao.py').write_text(s)
+s=(p/'servidor.py').read_text()
+s=s.replace("if url.path=='/api/conferencia':return self.reply(200,motor_validacao.compare_gabarito(db,ROOT/'resultado_esperado_100k.json'))", "if url.path=='/api/conferencia':return self.reply(200,motor_validacao.compare_gabarito(db,ROOT/'resultado_esperado_100k.json'))")
+s=s.replace("def main():\n    global HTML", "def main():\n    global HTML")
+s=s.replace("print(f'Antecipe V4 pronto", "print(f'Antecipe V5 pronto")
+s=s.replace("if url.path=='/api/arquivos':", "if url.path=='/api/diagnostico':\n                    counts=[dict(r) for r in db.execute(\"SELECT status, COUNT(*) quantidade FROM avaliacoes WHERE regra_id=(SELECT id FROM regras WHERE ativo=1 ORDER BY id DESC LIMIT 1) GROUP BY status\")]\n                    return self.reply(200,{'calculado':counts,'esperado':{'APROVADO':85215,'BARRADO':15339},'explicacao':'Os valores esperados são do gabarito. Divergências devem ser investigadas, não ajustadas artificialmente.'})\n                if url.path=='/api/arquivos':")
+(p/'servidor.py').write_text(s)
+html=(p/'index.html').read_text()
+html=html.replace('Antecipe V4','Antecipe V5')
+html=html.replace("for(let v of [r.documento,r.fundo,r.cedente,r.sacado,money(r.valor),r.vencimento,r.situacao,r.status,reasons])", "for(let v of [r.documento,r.fundo,r.cedente,r.sacado,money(r.valor),r.vencimento,r.situacao,r.status,reasons,money(r.valor_antecipavel||0)])")
+# ensure table header matches new column by adding to existing header row
+html=html.replace('<th>Motivos</th>', '<th>Motivos</th><th>Valor antecipável</th>')
+html=html.replace('Comparando resultados com o gabarito...', 'Conferindo as decisões e os motivos de recusa contra os 100.554 resultados oficiais...')
+html=html.replace("' recebíveis avaliados. Os novos resultados estão no painel.'", "' recebíveis avaliados; '+nf.format(res.pendentes||0)+' pendentes por falta de dados. Confira o painel e os motivos individuais.'")
+(p/'index.html').write_text(html)
