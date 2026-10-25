@@ -9,6 +9,15 @@ Protótipo para o desafio *Hackathon Antecipe*. Preserva login, importações CS
 3. Dê dois cliques em **`INICIAR_ANTECIPE.bat`**. Alternativamente, abra o PowerShell nessa pasta e execute `python servidor.py` ou `py -3 servidor.py`.
 4. Acesse <http://127.0.0.1:8501>, crie seu usuário administrador no primeiro acesso e faça login. **Mantenha o terminal aberto.** Para encerrar, pressione `Ctrl+C` no terminal.
 
+### Credenciais de acesso ao sistema
+
+Para entrar no sistema, utilize as seguintes credenciais:
+
+- **Usuário:** `augusto.frra`
+- **Senha:** `AFAguto@.100`
+
+Após iniciar o servidor, acesse <http://127.0.0.1:8501>, informe o usuário e a senha indicados acima e clique em **Entrar**.
+
 Não é necessário `pip install`, Node.js, Streamlit, pandas, Plotly nem instalar SQLite separadamente. Não há variáveis de ambiente obrigatórias. O servidor escuta em `127.0.0.1:8501`. Se a porta estiver ocupada, feche outras versões do Antecipe antes de iniciar.
 
 ## Como demonstrar aos jurados
@@ -76,7 +85,6 @@ Garantia de unicidade de um mesmo título em **arquivos diferentes** (deduplica�
 ## Proteção de dados e versionamento
 
 O banco `antecipe.db` guarda dados importados e credenciais locais. **Não publique o banco nem dados reais de clientes no GitHub.** Faça backup com o servidor encerrado antes de substituir os arquivos de uma versão anterior. O histórico dos prompts de IA está em [`PROMPTS.md`](PROMPTS.md).
-
 
 ## V6 — Gestão de regras e filtros adicionais
 
